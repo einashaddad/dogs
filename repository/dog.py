@@ -1,5 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
+from model import Dog
 from repository import Base
 from repository.sqlalchemy import session
 
@@ -28,6 +29,18 @@ class DogRepository(Base):
         })
 
     @classmethod
+    def map_to_model(cls, db_model):
+        return Dog(
+            name=db_model.name,
+            link=db_model.link,
+            image=db_model.image,
+            age=db_model.age,
+            weight=db_model.weight,
+            gender=db_model.gender,
+            breed=db_model.breed
+        )
+
+    @classmethod
     def map_from_model(cls, model):
         return DogRepository(
             name=model.name,
@@ -47,7 +60,8 @@ class DogRepository(Base):
 
     @staticmethod
     def get_by_name_and_breed(name, breed):
-        return session.query(DogRepository).filter(
+        dog = session.query(DogRepository).filter(
             DogRepository.name == name,
             DogRepository.breed == breed
-        ).all()
+        ).first()
+        return cls.map_to_model(dog)
