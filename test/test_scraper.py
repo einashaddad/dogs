@@ -1,4 +1,5 @@
 import unittest
+import vcr
 from unittest.mock import patch, Mock
 
 import scraper
@@ -17,28 +18,9 @@ class TestScraper(unittest.TestCase):
         'breed': 'Border Collie',
     })
 
-    class Request():
-        def __init__(self):
-            self.text = None
-
-    def setUp(self):
-
-        with open('test/fixtures/spca_fixture.html') as f:
-            self.spca_fixture = self.Request()
-            self.spca_fixture.text = f.read()
-
-        with open('test/fixtures/dog_fixture.html') as f:
-            self.dog_fixture = self.Request()
-            self.dog_fixture.text = f.read()
-
-    @patch('requests.get')
-    def test_scrape_spca(self, mock_get):
-        def side_effect(*args):
-            def second_call(*args):
-                return self.dog_fixture
-            mock_get.side_effect = second_call
-            return self.spca_fixture
-
-        mock_get.side_effect = side_effect
-        dogs = scraper.scrape_spca('url', 'https://www.sfspca.org')
+    @vcr.use_cassette('test/fixtures/spca.yaml', record_mode='new_episodes')
+    def test_scrape_spca(self):
+        base_url = 'https://www.sfspca.org'
+        url = base_url + "/adoptions/dogs"
+        dogs = scraper.scrape_spca(url, base_url)
         self.assertEqual(self.domino.name, dogs[0].name)

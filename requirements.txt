@@ -4,3 +4,4 @@ ipdb==0.11
 SQLAlchemy==1.2.10
 alembic==1.0.0
 psycopg2==2.7.5
+vcrpy==1.13.0
