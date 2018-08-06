@@ -1,12 +1,21 @@
 class Dog:
-    def __init__(self, name, link, image):
+    def __init__(
+        self,
+        name=None,
+        link=None,
+        image=None,
+        age=None,
+        weight=None,
+        gender=None,
+        breed=None,
+    ):
         self.name = name
         self.link = link
         self.image = image
-        self.age = None
-        self.weight = None
-        self.gender = None
-        self.breed = None
+        self.age = age
+        self.weight = weight
+        self.gender = gender
+        self.breed = breed
 
     def __repr__(self):
         return str({

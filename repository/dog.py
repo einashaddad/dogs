@@ -5,7 +5,6 @@ from repository.sqlalchemy import session
 
 
 class DogRepository(Base):
-
     __tablename__ = 'dog'
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -42,14 +41,9 @@ class DogRepository(Base):
 
     @classmethod
     def save(cls, dog_model):
-        try:
-            dog_repo = DogRepository.map_from_model(dog_model)
-            session.add(dog_repo)
-            session.commit()
-        except Exception as e:
-            print("Problem saving")
-            print("Traceback:", e)
-            raise
+        dog_repo = DogRepository.map_from_model(dog_model)
+        session.add(dog_repo)
+        session.commit()
 
     @staticmethod
     def get_by_name_and_breed(name, breed):
