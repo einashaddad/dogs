@@ -58,10 +58,11 @@ class DogRepository(Base):
         session.add(dog_repo)
         session.commit()
 
-    @staticmethod
-    def get_by_name_and_breed(name, breed):
+    @classmethod
+    def get_by_name_and_breed(cls, name, breed):
         dog = session.query(DogRepository).filter(
             DogRepository.name == name,
             DogRepository.breed == breed
         ).first()
-        return cls.map_to_model(dog)
+        if dog:
+            return cls.map_to_model(dog)
