@@ -1,6 +1,6 @@
 import requests
-
 from bs4 import BeautifulSoup
+
 from model import Dog
 from service import DogService
 
